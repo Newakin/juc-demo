@@ -158,7 +158,8 @@ private void breakBarrier() {
 * CountDownLatch是一次性的，CyclicBarrier可以重用。 
 * CountDownLatch和CyclicBarrier都有让多个线程等待同步然后再开始下一步动作的意思，
   但是CountDownLatch的下一步的动作实施者是主线程，具有不可重复性；
-  而CyclicBarrier的下一步动作实施者还是“其他线程”本身，具有往复多次实施动作的特点。
+  而CyclicBarrier的下一步动作实施者还是子线程，具有往复多次实施动作的特点。
+* CountDownLatch阻塞主线程，CyclicBarrier不阻塞主线程。  
 
 
 
