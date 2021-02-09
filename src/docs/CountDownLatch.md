@@ -48,7 +48,7 @@ private static final class Sync extends AbstractQueuedSynchronizer {
   此函数会递减计数器，如果归零则释放所有之前等待的线程。  
 
 ### 示例
-* [**MsgConsumer.java**](../main/java/com/example/jucdemo/countdownlatch/MsgConsumer.java)
+* [**CountDownLatchConsumer.java**](../main/java/com/example/jucdemo/countdownlatch/CountDownLatchConsumer.java)
 
 
 

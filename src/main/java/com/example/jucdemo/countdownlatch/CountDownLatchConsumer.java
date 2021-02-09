@@ -11,7 +11,7 @@ import javax.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MsgConsumer {
+public class CountDownLatchConsumer {
     private ExecutorService consumeExecutor = Executors.newFixedThreadPool(5);
 
     @PreDestroy
@@ -48,7 +48,7 @@ public class MsgConsumer {
     public static void main(String[] args) {
         List<String> msgList = Arrays.asList("test1","test2","test3");
         CountDownLatch countDownLatch = new CountDownLatch(msgList.size());
-        MsgConsumer consumer = new MsgConsumer();
+        CountDownLatchConsumer consumer = new CountDownLatchConsumer();
         msgList.parallelStream().forEach(t->{
             consumer.handleMsg(t,countDownLatch);
         });
