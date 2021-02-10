@@ -8,6 +8,8 @@
 * [**CountDownLatch**](../docs/CountDownLatch.md)
 * [**CyclicBarrier**](../docs/CyclicBarrier.md)
 * [**Phaser**](../docs/Phaser.md)
+* [**Semaphore**](../docs/Semaphore.md)
+* [**Exchanger**](../docs/Exchanger.md)
 
 
 
