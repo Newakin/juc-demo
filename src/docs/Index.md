@@ -16,7 +16,7 @@
 ## Collections
 ![collections.png](../pics/collections.png)
 * [**BlockingQueue**](../docs/BlockingQueue.md)
-
+* [**ConcurrentHashMap**](../docs/ConcurrentHashMap.md)
 
 
 ## Executor
