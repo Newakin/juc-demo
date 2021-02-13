@@ -753,7 +753,7 @@ public V get(Object key) {
 ```   
 
 ### 示例
-* [**SemaphoreConsumer.java**](../main/java/com/example/jucdemo/semaphore/SemaphoreConsumer.java)
+* [**ConcurrentHMDemo.java**](../main/java/com/example/jucdemo/concurrenthm/ConcurrentHMDemo.java)
 
 
 
