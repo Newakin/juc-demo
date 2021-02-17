@@ -35,7 +35,7 @@ public interface Delayed extends Comparable<Delayed< {
 ```  
 DelayQueue 将会在每个元素的 getDelay() 方法返回的值的时间段之后才释放掉该元素。如果返回的是 0 或者负值，延迟将被认为过期，该元素将会在 DelayQueue 的下一次 take  被调用的时候被释放掉。
 
-* LinkedBlockingQueue链式阻塞队列
+* LinkedBlockingQueue链表式阻塞队列，FIFO
 * PriorityBlockingQueue优先级阻塞队列  
 PriorityBlockingQueue 是一个无界的并发队列。它使用了和类 java.util.PriorityQueue 一样的排序规则。你无法向这个队列中插入 null 值。
 所有插入到 PriorityBlockingQueue 的元素必须实现 java.lang.Comparable 接口。因此该队列中元素的排序就取决于你自己的 Comparable 实现。

@@ -1,5 +1,6 @@
 ## FutureTask
 ![futuretask-1.png](../pics/futuretask-1.png)  
+Future 表示了一个任务的生命周期，是一个可取消的异步运算，可以把它看作是一个异步操作的结果的占位符，它将在未来的某个时刻完成，并提供对其结果的访问。在并发包中许多异步任务类都继承自Future，其中最典型的就是 FutureTask。  
 FutureTask实现了RunnableFuture接口，而RunnableFuture接口继承了Runnable接口和Future接口，所以FutureTask既能当做一个Runnable直接被Thread执行，
 也能得到Callable的计算结果。  
 
