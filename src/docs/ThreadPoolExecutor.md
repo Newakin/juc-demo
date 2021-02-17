@@ -502,6 +502,15 @@ private void interruptWorkers() {
 * IO密集型: 尽可能多的线程, Ncpu*2，比如数据库连接池  
 * 混合型: CPU密集型的任务与IO密集型任务的执行时间差别较大，拆分为两个线程池；否则没有必要拆分。
 
+### 注意
+线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。  
+说明：Executors返回的线程池对象的弊端如下：  
+1） FixedThreadPool和SingleThreadPool：  
+  允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而导致OOM。   
+2） CachedThreadPool：  
+  允许的创建线程数量为Integer.MAX_VALUE，可能会创建大量的线程，从而导致OOM。  
+
+
 ### 示例
 * [**MonitorThread.java**](../main/java/com/example/jucdemo/threadpoolexecutor/MonitorThread.java)
 
