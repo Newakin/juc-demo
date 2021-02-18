@@ -16,6 +16,10 @@ public class AbaDemo1 {
         aba_fix();
     }
 
+    /**
+     * AtomicStampedReference来解决，维护版本号；
+     * AtomicMarkableReference也可以解决，维护一个boolean类型的标记。
+     */
     @SneakyThrows
     private static void aba_fix() {
         AtomicStampedReference<Integer> atomicStampedRef =
