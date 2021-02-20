@@ -4,6 +4,10 @@
 ![mimylr.png](../pics/mimyIr.png)
 ![RrUjee.png](../pics/RrUjee.png)
 
+## Atomic
+* [**JUC原子类**](../docs/JUCAtomic.md)
+
+
 ## Tools
 * [**CountDownLatch**](../docs/CountDownLatch.md)
 * [**CyclicBarrier**](../docs/CyclicBarrier.md)
@@ -28,5 +32,3 @@
 
 
 
-## Atomic
-* [**JUC原子类**](../docs/JUCAtomic.md)  
