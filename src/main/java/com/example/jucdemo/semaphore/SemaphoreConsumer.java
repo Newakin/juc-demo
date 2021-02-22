@@ -54,7 +54,7 @@ public class SemaphoreConsumer {
     @SneakyThrows
     public static void main(String[] args) {
         SemaphoreConsumer consumer = new SemaphoreConsumer();
-        //停车场就10个车位
+        //停车场就2个车位
         Semaphore semaphore = new Semaphore(2);
         for (int i =0; i<10; i++){
             //有10辆车等着进入停车场

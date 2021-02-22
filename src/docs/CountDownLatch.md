@@ -41,6 +41,15 @@ private static final class Sync extends AbstractQueuedSynchronizer {
     }
 }
 ```
+### 构造函数  
+```java
+public CountDownLatch(int count) {
+    if (count < 0) throw new IllegalArgumentException("count < 0");
+    // 初始化状态数
+    this.sync = new Sync(count);
+}
+```
+
 ### 核心函数
 * await()  
   此函数会再当前线程的倒计数归零之前一直等待，除非线程被中断。  
