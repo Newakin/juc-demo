@@ -31,7 +31,7 @@ for (;;) {
 ```
 
 ### 示例
-* [**SemaphoreConsumer.java**](../main/java/com/example/jucdemo/semaphore/SemaphoreConsumer.java)
+* [**ExchangerConsumer.java**](../main/java/com/example/jucdemo/exchanger/ExchangerConsumer.java)
 
 
 
