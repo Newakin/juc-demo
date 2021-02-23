@@ -1,7 +1,7 @@
 # JUC Demo
 --java.util.concurrent
 
-![mimylr.png](../pics/mimyIr.png)
+![mimylr.png](../pics/mimyIr.png)  
 ![RrUjee.png](../pics/RrUjee.png)
 
 ## Atomic

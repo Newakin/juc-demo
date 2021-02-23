@@ -355,7 +355,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
 }
 ```
 线程池的线程数量达corePoolSize后，即使线程池没有可执行任务时，也不会释放线程。  
-FixedThreadPool的工作队列为无界队列LinkedBlockingQueue(队列容量为Integer.MAX_VALUE), 这会导致以下问题:  
+FixedThreadPool的工作队列近似无界队列LinkedBlockingQueue(队列容量为Integer.MAX_VALUE), 这会导致以下问题:  
 * 线程池里的线程数量不超过corePoolSize,这导致了maximumPoolSize和keepAliveTime将会是个无用参数;  
 * 饱和策略失效；  
 

@@ -37,7 +37,7 @@ public class ConcurrentHMDemo {
 
     public void handleMsg(Map<String,Object> conMap, CountDownLatch countDownLatch){
         consumeExecutor.execute(() -> {
-            log.info("子线程{}正在处理消息：{}",Thread.currentThread().getName());
+            log.info("子线程{}正在处理消息..",Thread.currentThread().getName());
             while (true) {
                 Integer oldValue = (Integer)conMap.get("score");
                 if (oldValue == null) {
@@ -55,7 +55,7 @@ public class ConcurrentHMDemo {
 
     public void handleMsg2(Map<String,Object> conMap, CountDownLatch countDownLatch){
         consumeExecutor.execute(() -> {
-            log.info("子线程{}正在处理消息：{}",Thread.currentThread().getName());
+            log.info("子线程{}正在处理消息..",Thread.currentThread().getName());
             AtomicInteger oldValue = (AtomicInteger)conMap.get("score");
             if (oldValue == null) {
                 AtomicInteger newValue = new AtomicInteger(0);

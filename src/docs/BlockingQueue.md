@@ -1,7 +1,7 @@
 ## BlockingQueue & BlockingDeque
 ### BlockingQueue
 BlockingQueue 通常用于一个线程生产对象，而另外一个线程消费这些对象的场景。  
-会阻塞。
+会阻塞。  
 ![BlockingQueue1.png](../pics/BlockingQueue1.png)
 
 ### BlockingQueue的方法
@@ -29,7 +29,7 @@ BlockingQueue<String> queue = new ArrayBlockingQueue<String>(1024);
 * DelayQueue延迟队列  
 DelayQueue 对元素进行持有直到一个特定的延迟到期。注入其中的元素必须实现 java.util.concurrent.Delayed 接口，该接口定义:  
 ```java
-public interface Delayed extends Comparable<Delayed< {
+public interface Delayed extends Comparable<Delayed> {
     public long getDelay(TimeUnit timeUnit);
 }
 ```  
@@ -57,7 +57,7 @@ BlockingQuDeque 具有 4 组不同的方法用于插入、移除以及对队列�
 
 | | 抛异常 | 特定值(true/false) | 阻塞 | 超时(true/false)|
 | --- | --- | --- | --- | --- |
-|插入 |addFirst(o)/addLast(o)  |offerFirst(o)/offerLast(o)|puputFirst(o)/putLast(o)|offerFirst(o, timeout, timeunit)/offerLast(o, timeout, timeunit)|
+|插入 |addFirst(o)/addLast(o)  |offerFirst(o)/offerLast(o)|putFirst(o)/putLast(o)|offerFirst(o, timeout, timeunit)/offerLast(o, timeout, timeunit)|
 |移除 |removeFirst(o)/removeLast(o)|pollFirst(o)/pollLast(o)|takeFirst(o)/takeLast(o)|pollFirst(timeout, timeunit)/pollLast(timeout, timeunit)|
 |检查 |getFirst(o)/getLast(o)|peekFirst(o)/peekLast(o)|  |   |
 

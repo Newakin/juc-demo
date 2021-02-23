@@ -1,5 +1,6 @@
 ## CopyOnWriteArrayList
-CopyOnWriteArrayList是ArrayList 的一个线程安全的变体，其中所有可变操作(add、set 等等)都是通过对底层数组进行一次新的拷贝来实现的。COW模式的体现  
+CopyOnWriteArrayList是ArrayList 的一个线程安全的变体，其中所有可变操作(add、set 等等)都是通过对底层数组进行一次新的拷贝来实现的。
+COW(Copy-on-Write)模式的体现  
 
 ### 继承关系
 实现了List接口，实现RandomAccess接口，表示可以随机访问（数组具有随机访问的特性），实现Cloneable表示可以克隆。  

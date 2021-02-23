@@ -790,9 +790,9 @@ public static ExecutorService newWorkStealingPool();
 为了两个任务并行，三个方法的调用顺序需要万分注意  
 ```java
 right.fork(); // 计算右边的任务
-        long leftAns = left.compute(); // 计算左边的任务(同时右边任务也在计算)
-        long rightAns = right.join(); // 等待右边的结果
-        return leftAns + rightAns;
+long leftAns = left.compute(); // 计算左边的任务(同时右边任务也在计算)
+long rightAns = right.join(); // 等待右边的结果
+return leftAns + rightAns;
 ```
 
 如果写成如下两种方式，则实际并没有并行：  

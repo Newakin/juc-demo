@@ -10,7 +10,7 @@ ConcurrentHashMap将整个Hash表分为多个段(Segment数组)，而每个Segme
 这样在执行操作的时候首先根据Hash算法定位到Segment，然后加锁，从而实现线程安全。
 
 #### 数据结构
-![concurrentHashMap17.png](../pics/concurrentHashMap17.png)
+![concurrentHashMap17.png](../pics/concurrentHashMap17.png)  
 concurrencyLevel: 并发数，Segment[15]，默认size是16。可以在初始化的时候设置，但不可扩容。
 
 #### 初始化
@@ -477,7 +477,6 @@ private final void treeifyBin(Node<K,V>[] tab, int index) {
         // 所以，如果数组长度小于 64 的时候，其实也就是 32 或者 16 或者更小的时候，会进行数组扩容
         // 扩容为翻倍扩容：2n
         if ((n = tab.length) < MIN_TREEIFY_CAPACITY)
-            // 后面我们再详细分析这个方法
             tryPresize(n << 1);
         // b 是头结点
         else if ((b = tabAt(tab, index)) != null && b.hash >= 0) {
@@ -513,10 +512,9 @@ private final void treeifyBin(Node<K,V>[] tab, int index) {
 
 ####数据迁移 transfer()
 扩容的主要方法  
-虽然我们之前说的 tryPresize 方法中多次调用 transfer 不涉及多线程，但是这个 transfer 方法可以在其他地方被调用，典型地，我们之前在说 put 方法的时候就说过了，请往上看 put 方法，是不是有个地方调用了 helpTransfer 方法，helpTransfer 方法会调用 transfer 方法的。  
-此方法支持多线程执行，外围调用此方法的时候，会保证第一个发起数据迁移的线程，nextTab 参数为 null，之后再调用此方法的时候，nextTab 不会为 null。  
+transfer方法支持多线程执行，外围调用此方法的时候，会保证第一个发起数据迁移的线程，nextTab 参数为 null，之后再调用此方法的时候，nextTab 不会为 null。  
 阅读源码之前，先要理解并发操作的机制。原数组长度为 n，所以我们有 n 个迁移任务，让每个线程每次负责一个小任务是最简单的，每做完一个任务再检测是否有其他没做完的任务，帮助迁移就可以了，而 Doug Lea 使用了一个 stride，简单理解就是步长，每个线程每次负责迁移其中的一部分，如每次迁移 16 个小任务。所以，我们就需要一个全局的调度者来安排哪个线程执行哪几个任务，这个就是属性 transferIndex 的作用。   
-第一个发起数据迁移的线程会将 transferIndex 指向原数组最后的位置，然后从后往前的 stride 个任务属于第一个线程，然后将 transferIndex 指向新的位置，再往前的 stride 个任务属于第二个线程，依此类推。当然，这里说的第二个线程不是真的一定指代了第二个线程，也可以是同一个线程，这个读者应该能理解吧。其实就是将一个大的迁移任务分为了一个个任务包。
+第一个发起数据迁移的线程会将 transferIndex 指向原数组最后的位置，然后从后往前的 stride 个任务属于第一个线程，然后将 transferIndex 指向新的位置，再往前的 stride 个任务属于第二个线程，依此类推。当然，这里说的第二个线程不是真的一定指代了第二个线程，也可以是同一个线程，其实就是将一个大的迁移任务分为了一个个任务包。
 ```java
 private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
     int n = tab.length, stride;
