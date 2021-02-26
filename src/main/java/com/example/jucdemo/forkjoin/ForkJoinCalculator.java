@@ -31,7 +31,7 @@ public class ForkJoinCalculator {
                 SumTask taskRight = new SumTask(numbers, middle + 1, to);
                 taskLeft.fork();
                 taskRight.fork();
-                return taskLeft.join() + taskRight.join();
+                return taskRight.join() + taskLeft.join();
             }
         }
     }

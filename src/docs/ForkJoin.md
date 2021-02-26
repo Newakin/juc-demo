@@ -22,7 +22,7 @@ ForkJoinPool可以通过池中的ForkJoinWorkerThread来处理ForkJoinTask任务
 2. 队列支持三个功能：  
   * push/pop 只能被队列的所有者调用；  
   * poll 可以被其他线程调用；  
-3. 子任务继续被划分试(fork),都会被push到自己的队列中；  
+3. 子任务继续被划分(fork),都会被push到自己的队列中；  
 4. 一般情况下，工作线程从自己的队列中执行任务；但是自己的队列空了的时候就随机从另一个线程的队列末尾窃取(poll)任务。
 5. 提交到线程池的外部任务放到workQueue的偶数槽位， 内部分隔(Fork)的任务放到基数槽位。  
 ![forkjoin-3.png](../pics/forkjoin-3.png)  

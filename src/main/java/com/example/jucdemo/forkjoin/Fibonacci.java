@@ -17,21 +17,34 @@ public class Fibonacci extends RecursiveTask<Integer> {
         if (n <= 1) {
             return n;
         }
-//        Fibonacci f1 = new Fibonacci(n - 1);
-//        f1.fork();
-//        Fibonacci f2 = new Fibonacci(n - 2);
-//        return f2.compute() + f1.join();
-
         /**
          * 可以两个任务都fork，要注意的是两个任务都fork的情况，必须按照f1.fork()，f2.fork()， f2.join()，f1.join()这样的顺序，不然有性能问题
          */
         Fibonacci f1 = new Fibonacci(n - 1);
         Fibonacci f2 = new Fibonacci(n - 2);
+
         /**
-         * invokeAll会把传入的任务的第一个交给当前线程来执行，其他的任务都fork加入工作队列，这样等于利用当前线程也执行任务了
+         * 方法一，compute() 会使用当前线程来执行。
+         * 6765, 8ms
          */
-        invokeAll(f1,f2);
-        return f2.join() + f1.join();
+//        f1.fork();
+//        return f2.compute() + f1.join();
+
+        /**
+         * 方法二， invokeAll会把传入的任务的第一个交给当前线程来执行，其他的任务都fork加入工作队列，这样等于利用当前线程也执行任务了
+         * 6765, 8ms
+         */
+//        invokeAll(f1,f2);
+//        return f2.join() + f1.join();
+
+        /**
+         * 方法三， fork()/join()
+         * 6765, 9ms
+         */
+        f1.fork();
+        f2.fork();
+        return f2.join()+f1.join();
+
     }
 
     public static void main(String[] args) {

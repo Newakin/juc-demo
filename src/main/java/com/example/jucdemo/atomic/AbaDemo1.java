@@ -12,7 +12,7 @@ public class AbaDemo1 {
 
     @SneakyThrows
     public static void main(String[] args) {
-        aba_desc();
+//        aba_desc();
         aba_fix();
     }
 

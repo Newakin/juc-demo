@@ -15,6 +15,8 @@ concurrencyLevel: 并发数，Segment[15]，默认size是16。可以在初始化
 
 #### 初始化
 ```java
+// initialCapacity: 整个ConcurrentHashMap的初始容量，实际操作时需要平均分配给每个segment.
+// loadFactor: 负载因子，每个segment使用。
 public ConcurrentHashMap(int initialCapacity,
                          float loadFactor, int concurrencyLevel) {
     if (!(loadFactor > 0) || initialCapacity < 0 || concurrencyLevel <= 0)
@@ -231,13 +233,13 @@ private void rehash(HashEntry<K,V> node) {
     // 新的掩码，如从 16 扩容到 32，那么 sizeMask 为 31，对应二进制 ‘000...00011111’
     int sizeMask = newCapacity - 1;
 
-    // 遍历原数组，老套路，将原数组位置 i 处的链表拆分到 新数组位置 i 和 i+oldCap 两个位置
     for (int i = 0; i < oldCapacity ; i++) {
         // e 是链表的第一个元素
         HashEntry<K,V> e = oldTable[i];
         if (e != null) {
             HashEntry<K,V> next = e.next;
             // 计算应该放置在新数组中的位置，
+            // 因为扩容必须是2的n次方，所以HashMap在put和get元素的时候直接取key的hashCode然后经过再次均衡后直接采用&位运算就能达到取模效果
             // 假设原数组长度为 16，e 在 oldTable[3] 处，那么 idx 只可能是 3 或者是 3 + 16 = 19
             int idx = e.hash & sizeMask;
             if (next == null)   // 该位置处只有一个元素，那比较好办
@@ -248,12 +250,12 @@ private void rehash(HashEntry<K,V> node) {
                 // idx 是当前链表的头结点 e 的新位置
                 int lastIdx = idx;
 
-                // 下面这个 for 循环会找到一个 lastRun 节点，这个节点之后的所有元素是将要放到一起的
+                // 这个for循环时为了找到rehash之后新的bucket 的Index不再改变的链表位置
                 for (HashEntry<K,V> last = next;
                      last != null;
                      last = last.next) {
                     int k = last.hash & sizeMask;
-                    if (k != lastIdx) {
+                    if (k != lastIdx) { //找到可重用部分的链表头部
                         lastIdx = k;
                         lastRun = last;
                     }
@@ -267,7 +269,7 @@ private void rehash(HashEntry<K,V> node) {
                     int h = p.hash;
                     int k = h & sizeMask;
                     HashEntry<K,V> n = newTable[k];
-                    newTable[k] = new HashEntry<K,V>(h, p.key, v, n);
+                    newTable[k] = new HashEntry<K,V>(h, p.key, v, n); //在rehash过程中所有的不可重用节点都是new出来的
                 }
             }
         }
@@ -279,6 +281,16 @@ private void rehash(HashEntry<K,V> node) {
     table = newTable;
 }
 ```
+因为扩容必须是2的n次方，所以HashMap在put和get元素的时候直接取key的hashCode然后经过再次均衡后直接采用&位运算就能达到取模效果  
+> [0]=null  
+ [1]=3->5->7
+
+
+> [0]=null  
+[1]=5->7  
+[2]=null  
+[3]=3  
+
 #### get过程  
 1. 计算hash值找到segment数组中的具体位置。  
 2. 再根据hash值找到在是哪个HashEntry。  
@@ -508,7 +520,60 @@ private final void treeifyBin(Node<K,V>[] tab, int index) {
 当往hashMap中成功插入一个key/value节点时，有两种情况可能触发扩容动作：  
 1、如果新增节点之后，所在链表的元素个数达到了阈值 8，则会调用treeifyBin方法把链表转换成红黑树，不过在结构转换之前，会对数组长度进行判断，实现如下：如果数组长度n小于阈值MIN_TREEIFY_CAPACITY，默认是64，则会调用tryPresize方法把数组长度扩大到原来的两倍，并触发transfer方法，重新调整节点的位置。  
 2、调用put方法新增节点时，在结尾会调用addCount方法记录元素个数，并检查是否需要进行扩容，当数组元素个数达到阈值时，会触发transfer方法，重新调整节点的位置。  
+```java
+// 首先要说明的是，方法参数 size 传进来的时候就已经翻了倍了
+private final void tryPresize(int size) {
+    // c: size 的 1.5 倍，再加 1，再往上取最近的 2 的 n 次方。
+    int c = (size >= (MAXIMUM_CAPACITY >>> 1)) ? MAXIMUM_CAPACITY :
+        tableSizeFor(size + (size >>> 1) + 1);
+    int sc;
+    //如果不满足条件，也就是 sizeCtl < 0 ，说明有其他线程正在扩容当中，这里也就不需要自己去扩容了，结束该方法
+    while ((sc = sizeCtl) >= 0) {
+        Node<K,V>[] tab = table; int n;
 
+        // 数组初始化
+        if (tab == null || (n = tab.length) == 0) {
+            n = (sc > c) ? sc : c;
+            //将sizeCtl设置为-1，代表取得了锁。
+            if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
+                try {
+                    if (table == tab) {
+                        @SuppressWarnings("unchecked")
+                        Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n];
+                        table = nt;
+                        sc = n - (n >>> 2); // 0.75 * n
+                    }
+                } finally {
+                    //初始化完成后 sizeCtl 用于记录当前集合的负载容量值，也就是触发集合扩容的阈值
+                    sizeCtl = sc;
+                }
+            }
+        }
+        else if (c <= sc || n >= MAXIMUM_CAPACITY)
+            break;
+        else if (tab == table) {
+            int rs = resizeStamp(n);
+
+            if (sc < 0) {
+                Node<K,V>[] nt;
+                if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
+                    sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
+                    transferIndex <= 0)
+                    break;
+                // 2. 用 CAS 将 sizeCtl 加 1，然后执行 transfer 方法
+                //    此时 nextTab 不为 null
+                if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
+                    transfer(tab, nt);
+            }
+            // 1. 将 sizeCtl 设置为 (rs << RESIZE_STAMP_SHIFT) + 2)
+            //  调用 transfer 方法，此时 nextTab 参数为 null
+            else if (U.compareAndSwapInt(this, SIZECTL, sc,
+                                         (rs << RESIZE_STAMP_SHIFT) + 2))
+                transfer(tab, null);
+        }
+    }
+}
+```
 
 ####数据迁移 transfer()
 扩容的主要方法  
@@ -566,9 +631,8 @@ private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
     for (int i = 0, bound = 0;;) {
         Node<K,V> f; int fh;
 
-        // 下面这个 while 真的是不好理解
         // advance 为 true 表示可以进行下一个位置的迁移了
-        //   简单理解结局: i 指向了 transferIndex，bound 指向了 transferIndex-stride
+        //   简单理解: i 指向了 transferIndex，bound 指向了 transferIndex-stride
         while (advance) {
             int nextIndex, nextBound;
             if (--i >= bound || finishing)

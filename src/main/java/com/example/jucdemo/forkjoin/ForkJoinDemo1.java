@@ -34,7 +34,7 @@ public class ForkJoinDemo1 extends RecursiveTask<Long> {
         task1.fork();
         task2.fork();
         //获取任务执行的结果
-        return task1.join() + task2.join();
+        return task2.join() + task1.join();
     }
 
     private static void testForkJoin() {
@@ -77,8 +77,8 @@ public class ForkJoinDemo1 extends RecursiveTask<Long> {
 
     public static void main(String[] args) {
 //        testExecutorService();
-//        testForkJoinService();
-        testForkJoin();
+        testForkJoinService();
+//        testForkJoin();
 //        StreamCalculator.sumUp();
     }
 }
