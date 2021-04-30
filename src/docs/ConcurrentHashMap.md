@@ -6,7 +6,7 @@ JDK1.8：数组+链表+红黑二叉树+CAS原子操作。
 HashTable使用synchronized关键字来实现线程安全，而这样会对整个对象加锁，所以效率低下。
 
 ### ConcurrentHashMap - JDK1.7
-ConcurrentHashMap将整个Hash表分为多个段(Segment数组)，而每个Segment元素继承ReentrantLock加锁，
+ConcurrentHashMap将整个Hash表分为多个段(Segment数组)，而每个Segment元素通过继承ReentrantLock从而加锁，
 这样在执行操作的时候首先根据Hash算法定位到Segment，然后加锁，从而实现线程安全。
 
 #### 数据结构
