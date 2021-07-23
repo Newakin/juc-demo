@@ -34,6 +34,20 @@
       FactoryBean：只是spring容器管理的bean的一员。  
       只是这个bean比较特殊，它也可以产生一些指定类型bean的实例。  
 
+###Bean的生命周期  
+https://www.jianshu.com/p/1dec08d290c1  
+总结：  
+
+    beanpostprocessorBeforeInstatiation  
+    实例化阶段  
+    beanpostprocessorAfterInstatiation  
+    属性赋值阶段  
+    beanpostprocessorBeforeInitialization  
+    各种Aware接口  
+    初始化阶段 实现InitializingBean  
+    beanpostprocessorAfterInitialization  
+    销毁阶段  实现DisposableBean  
+
 ![beanFactory.png](../resources/pics/beanFactory.png)
 - 基本容器BeanFactory的学习
 		1.通过手写spring基础容器去了解它
