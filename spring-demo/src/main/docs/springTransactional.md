@@ -107,4 +107,25 @@ ACID是传统数据库常用的概念设计，追求强一致性模型。简单�
 也就是说，在同一个类中的方法调用，则不会被方法拦截器拦截到，因此事务不会起作用。
 4. 使用了@Transactional的方法，只能是public，@Transactional注解的方法都是被外部其他类调用才有效，故只能是public。道理和上面的有关联。故在 protected、private 或者 package-visible 的方法上使用 @Transactional 注解，它也不会报错，但事务无效。  
 
+![2锁基本概念.png](../resources/pics/2锁基本概念.png)   
+![4事务和锁的区别.png](../resources/pics/4事务和锁的区别.png)   
 
+
+
+------------------
+分布式锁  
+![redis分布式事务锁.png](../resources/pics/redis分布式事务锁.png)   
+
+DB实现分布式锁  
+![乐观锁DB.png](../resources/pics/乐观锁DB.png)   
+![悲观锁DB.png](../resources/pics/悲观锁DB.png)   
+Redis实现分布式锁  
+![redis分布式锁.png](../resources/pics/redis分布式锁.png)   
+存在错误删除：A线程执行的很慢30s过期并自动释放了锁，B获取锁并执行， 
+此时，A线程执行完了，接着执行del释放锁，但是B还没执行完，线程A实际上删除的是B的锁。    
+错误删除锁的解决方案：  删除时带着线程id的判断/redis原子化操作(lua script)  
+![释放锁的解决方案1.png](../resources/pics/释放锁的解决方案1.png)   
+![Lua释放锁.png](../resources/pics/Lua释放锁.png)   
+
+
+ 

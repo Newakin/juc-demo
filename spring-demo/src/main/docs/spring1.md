@@ -11,7 +11,7 @@
       userService.setDao(userDao);  
       new User("lisi");  
     - AOP：Aspect Oriented Programming，面向切面编程。在不修改目标对象的源代码情况下，增强IoC容器中Bean的功能。  
-      spring是BOP编程思想的实现。在spring里面一切都是由bean开始。  
+      spring是AOP编程思想的实现。在spring里面一切都是由bean开始。  
   
       UserService是被spring管理的bean，同时spring还可以在管理该bean的同时，  
       按照要求对该bean进行功能增强（符合开闭原则）---使用AOP思想去实现的。  
@@ -39,14 +39,14 @@ https://www.jianshu.com/p/1dec08d290c1
 总结：  
 
     beanpostprocessorBeforeInstatiation  
-    实例化阶段  
+    1.实例化阶段  
     beanpostprocessorAfterInstatiation  
-    属性赋值阶段  
+    2.属性赋值阶段  
     beanpostprocessorBeforeInitialization  
     各种Aware接口  
-    初始化阶段 实现InitializingBean  
+    3.初始化阶段 实现InitializingBean  
     beanpostprocessorAfterInitialization  
-    销毁阶段  实现DisposableBean  
+    4.销毁阶段  实现DisposableBean  
 
 ![beanFactory.png](../resources/pics/beanFactory.png)
 - 基本容器BeanFactory的学习

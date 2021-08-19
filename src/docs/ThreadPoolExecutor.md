@@ -514,6 +514,7 @@ private void interruptWorkers() {
 ### 示例
 * [**MonitorThread.java**](../main/java/com/example/jucdemo/threadpoolexecutor/MonitorThread.java)
 
-
+### 美团  
+https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html  
 
 
